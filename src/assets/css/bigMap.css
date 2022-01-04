@@ -1,0 +1,30 @@
+.divWrap {
+    position: relative;
+    width: 200px;
+    height: 30px;
+}
+.divChild {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: -72px;
+    top: -30px;
+    background-color: #0099FF;
+    color: #fff;
+    font-size: 16px;
+    line-height: 30px;
+    padding-left: 10px;
+    box-sizing: border-box;
+    text-align: center;
+    display: none;
+}
+.divEquip {
+    width: 180px;
+    height: 264px;
+    background: rgba(0,0,0,0.8);
+    position: absolute;
+    right: -108px;
+    top: -30px;
+    display: none;
+}
+

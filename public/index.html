@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="icon" href="<%= BASE_URL %>logo.png">
+    <!-- <script src="https://cdn.bootcdn.net/ajax/libs/jquery/2.0.3/jquery.min.js"></script> -->
+    <!-- <script src="../node_modules/signalr/jquery.signalR.min.js"></script> -->
+    <!-- <script src="https://cdn.bootcdn.net/ajax/libs/signalr.js/2.4.0/jquery.signalR.min.js"></script>
+    <script src="http://8.141.63.98:8090/signalr/hubs"></script> -->
+    <!-- <title><%= htmlWebpackPlugin.options.title %></title>     -->
+    <title>冷丘钢丝绳测到位系统</title>
+    <style>
+      @media screen and (min-width:750px) {
+        html {
+          font-size: 16px !important;
+        }
+      }
+    </style>
+  </head>
+  <!-- 给body添加样式禁止双击缩放和双指缩放 -->
+  <body style="touch-action: pan-x pan-y;">
+    <script src="https://webapi.amap.com/maps?v=1.4.15&key=c7878925a90f49f301af8c501a413044&plugin=AMap.DistrictSearch"></script>
+    <noscript>
+      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+   
+  </body>
+</html>

@@ -1,0 +1,31 @@
+.el-table::before {
+    z-index: inherit;
+  }
+
+.el-table__body-wrapper::-webkit-scrollbar {
+    width: 2px;
+    /* height: 40px; */
+}
+.el-table__body-wrapper::-webkit-scrollbar-thumb  {
+    background-color: #0099FF !important;
+    border-radius: 8px;
+  }
+  ::-webkit-scrollbar-corner{
+    background: transparent !important;
+  }
+  .el-table::before {
+    height: 0px;
+ }
+
+ .el-table .has-gutter{
+    width: 230px !important;
+    display: table;
+  }
+  /* 解决表格头部宽度和表体宽度不一致的问题 */
+  .el-table .el-table__header-wrapper .el-table__header {
+    table-layout: auto !important;  
+  }
+  .el-table--scrollable-x .el-table__body-wrapper {
+    overflow-x: hidden;
+  }
+

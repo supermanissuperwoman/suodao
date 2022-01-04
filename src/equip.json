@@ -1,0 +1,9 @@
+{ "data": 
+    [ 
+    { "projectName": "项目名称1","equipmentName": "设备名称1", "serial": "传感器id", "riskLevel": "风险等级", "installLocation": "安装地址", "installDate": "安装时间", "workingStatus": "运行状态", "validTime": "服务到期时间" },
+    { "projectName": "项目名称1","equipmentName": "设备名称2", "serial": "传感器id", "riskLevel": "风险等级", "installLocation": "安装地址", "installDate": "安装时间", "workingStatus": "运行状态", "validTime": "服务到期时间" },
+    { "projectName": "项目名称1","equipmentName": "设备名称3", "serial": "传感器id", "riskLevel": "风险等级", "installLocation": "安装地址", "installDate": "安装时间", "workingStatus": "运行状态", "validTime": "服务到期时间" },
+    { "projectName": "项目名称1","equipmentName": "设备名称4", "serial": "传感器id", "riskLevel": "风险等级", "installLocation": "安装地址", "installDate": "安装时间", "workingStatus": "运行状态", "validTime": "服务到期时间" },
+    { "projectName": "项目名称1","equipmentName": "设备名称4", "serial": "传感器id", "riskLevel": "风险等级", "installLocation": "安装地址", "installDate": "安装时间", "workingStatus": "运行状态", "validTime": "服务到期时间" },
+    { "projectName": "项目名称1","equipmentName": "设备名称5", "serial": "传感器id", "riskLevel": "风险等级", "installLocation": "安装地址", "installDate": "安装时间", "workingStatus": "运行状态", "validTime": "服务到期时间" } ]
+    , "resultCode": "0000", "resultMessage": "Success" }

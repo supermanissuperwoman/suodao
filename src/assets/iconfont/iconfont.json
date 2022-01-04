@@ -1,0 +1,72 @@
+{
+  "id": "2699397",
+  "name": "LQicon",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "8436312",
+      "name": "箭头",
+      "font_class": "jiantou",
+      "unicode": "e69b",
+      "unicode_decimal": 59035
+    },
+    {
+      "icon_id": "10047316",
+      "name": "编辑",
+      "font_class": "ziyuan",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "1304947",
+      "name": "菜单",
+      "font_class": "caidan",
+      "unicode": "e62c",
+      "unicode_decimal": 58924
+    },
+    {
+      "icon_id": "15686582",
+      "name": "密码",
+      "font_class": "mima1",
+      "unicode": "e6cb",
+      "unicode_decimal": 59083
+    },
+    {
+      "icon_id": "1330915",
+      "name": "个人账户",
+      "font_class": "gerenzhanghu",
+      "unicode": "e61c",
+      "unicode_decimal": 58908
+    },
+    {
+      "icon_id": "10232775",
+      "name": "下拉",
+      "font_class": "xiala",
+      "unicode": "e78e",
+      "unicode_decimal": 59278
+    },
+    {
+      "icon_id": "14559325",
+      "name": "密码",
+      "font_class": "mima",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "20733496",
+      "name": "人员",
+      "font_class": "renyuan",
+      "unicode": "e6a9",
+      "unicode_decimal": 59049
+    },
+    {
+      "icon_id": "15628935",
+      "name": "下载",
+      "font_class": "xiazai",
+      "unicode": "e697",
+      "unicode_decimal": 59031
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+    color: #fff;
+}
+body {
+    background-color: #070a1d;
+}
+li {
+    list-style: none;
+}
+/* 详情页表格偶数行背景色 */
+.el-table .even {
+        background-color: #292B3D;
+}
+/* 详情页表格奇数行背景色 */
+.el-table .odd {
+    background-color: #1C1F30;
+}
+/* 系统设置页表格偶数行背景色 */
+.el-table .evenSet {
+    background-color: #161A25;
+}
+/* 系统设置页表格奇数行背景色 */
+.el-table .oddSet {
+    background-color: #272C3C;
+}
+/* 实时详情页 修改element默认样式 开始 */
+/* 搜索框样式 */
+.el-select .select-trigger .el-input .el-input__inner {
+    background-color: #1C1F30;
+    border: 1px solid #758AAA;
+    color: #0099FF;
+}
+.el-scrollbar {
+    background-color: #1C1F30;
+    border: 0;
+}
+.el-select-dropdown__item {
+    color: #fff !important;
+}
+/* 选择项 鼠标滑过 背景色 */
+.el-select-dropdown__item:hover {
+    background-color: #0099FF !important;
+}
+/* 选择框 样式 */
+.el-select__popper {
+    border: 1px solid #494C59 !important;
+    box-shadow: 0px 0px 7px 1px rgba(255, 255, 255, 0.14) !important;
+    border-radius: 2px !important;
+}
+/* 损伤列表 总条目 字体颜色 */
+.el-pagination__total {
+    /* color: #fff !important; */
+}
+/* 实时详情页 修改element默认样式 结束 */
+
+/* .el-input__inner {
+    background: #33394E !important;
+    border: 0px !important;
+  } */
+.el-checkbox__inner {
+    /* width: 23px !important;
+    height: 23px !important;
+    text-align: center !important; */
+}
+.el-checkbox__label {
+    /* color: #758AAA !important; */
+}
+.el-checkbox__inner::after {
+    /* left: 9px !important;
+    top: 5px !important; */
+}
+
