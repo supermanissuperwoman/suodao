@@ -52,95 +52,120 @@
         <span v-show="!isProjectShow" class="text">当前项目</span>
       </div>
     </el-col>
-    <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
-      <div class="equipementAmount stateCommon">
-        <div class="icon" @click="updataList('all')">
-          <img src="../assets/image/shebei.svg" alt="" />
-        </div>
-        <span :class="{ number: true, allActive: lightObj.all }">{{
-          equipStateGroup.equipmentCount
-        }}</span>
-        <span :class="{ text: true, allActive: lightObj.all }">全部设备</span>
-      </div></el-col
-    >
-    <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3"
-      ><div class="workingAmount stateCommon">
-        <div class="icon" @click="updataList('working')">
-          <img src="../assets/image/yunxing.svg" alt="" />
-        </div>
-        <span :class="{ number: true, workActive: lightObj.working }">{{
-          equipStateGroup.runningCount
-        }}</span>
-        <span :class="{ text: true, workActive: lightObj.working }"
-          >运行设备</span
+    <el-col :xs="21" :sm="21" :md="21" :lg="21" :xl="21">
+      <el-row>
+        <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
+          <div class="equipementAmount stateCommon">
+            <div class="icon" @click="updataList('all')">
+              <img src="../assets/image/shebei.svg" alt="" />
+            </div>
+            <span :class="{ number: true, allActive: lightObj.all }">{{
+              equipStateGroup.equipmentCount
+            }}</span>
+            <span :class="{ text: true, allActive: lightObj.all }"
+              >全部设备</span
+            >
+          </div></el-col
         >
-      </div></el-col
-    >
-    <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3"
-      ><div class="offlineAmount stateCommon">
-        <div class="icon" @click="updataList('offline')">
-          <img src="../assets/image/lixian.svg" alt="" />
-        </div>
-        <span :class="{ number: true, offlineActive: lightObj.offline }">{{
-          equipStateGroup.offlineCount
-        }}</span>
-        <span :class="{ text: true, offlineActive: lightObj.offline }"
-          >离线设备</span
+        <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3"
+          ><div class="workingAmount stateCommon">
+            <div class="icon" @click="updataList('working')">
+              <img src="../assets/image/yunxing.svg" alt="" />
+            </div>
+            <span :class="{ number: true, workActive: lightObj.working }">{{
+              equipStateGroup.runningCount
+            }}</span>
+            <span :class="{ text: true, workActive: lightObj.working }"
+              >运行设备</span
+            >
+          </div></el-col
         >
-      </div></el-col
-    >
-    <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3"
-      ><div class="alarmAmount stateCommon">
-        <div class="icon" @click="updataList('alarm')">
-          <img src="../assets/image/baojing.svg" alt="" />
-        </div>
-        <span :class="{ number: true, alarmActive: lightObj.alarm }">{{
-          equipStateGroup.alarmCount
-        }}</span>
-        <span :class="{ text: true, alarmActive: lightObj.alarm }"
-          >报警设备</span
+        <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3"
+          ><div class="offlineAmount stateCommon">
+            <div class="icon" @click="updataList('offline')">
+              <img src="../assets/image/lixian.svg" alt="" />
+            </div>
+            <span :class="{ number: true, offlineActive: lightObj.offline }">{{
+              equipStateGroup.offlineCount
+            }}</span>
+            <span :class="{ text: true, offlineActive: lightObj.offline }"
+              >离线设备</span
+            >
+          </div></el-col
         >
-      </div></el-col
-    >
-    <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3"
-      ><div class="freeAmount stateCommon">
-        <div class="icon" @click="updataList('standby')">
-          <img src="../assets/image/daiji.svg" alt="" />
-        </div>
-        <span :class="{ number: true, standbyActive: lightObj.standby }">{{
-          equipStateGroup.standbyCount
-        }}</span>
-        <span :class="{ text: true, standbyActive: lightObj.standby }"
-          >待机设备</span
+        <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3"
+          ><div class="alarmAmount stateCommon">
+            <div class="icon" @click="updataList('alarm')">
+              <img src="../assets/image/baojing.svg" alt="" />
+            </div>
+            <span :class="{ number: true, alarmActive: lightObj.alarm }">{{
+              equipStateGroup.alarmCount
+            }}</span>
+            <span :class="{ text: true, alarmActive: lightObj.alarm }"
+              >报警设备</span
+            >
+          </div></el-col
         >
-      </div></el-col
-    >
-    <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3"
-      ><div class="faultAmount stateCommon">
-        <div class="icon" @click="updataList('fault')">
-          <img src="../assets/image/guzhang.svg" alt="" />
-        </div>
-        <span :class="{ number: true, falutActive: lightObj.fault }">{{
-          equipStateGroup.faultCount
-        }}</span>
-        <span :class="{ text: true, falutActive: lightObj.fault }"
-          >故障设备</span
+        <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3"
+          ><div class="freeAmount stateCommon">
+            <div class="icon" @click="updataList('standby')">
+              <img src="../assets/image/daiji.svg" alt="" />
+            </div>
+            <span :class="{ number: true, standbyActive: lightObj.standby }">{{
+              equipStateGroup.standbyCount
+            }}</span>
+            <span :class="{ text: true, standbyActive: lightObj.standby }"
+              >待机设备</span
+            >
+          </div></el-col
         >
-      </div></el-col
-    >
-    <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3"
-      ><div class="disableAmount stateCommon">
-        <div class="icon" @click="updataList('disabled')">
-          <img src="../assets/image/tingyong.svg" alt="" />
-        </div>
-        <span :class="{ number: true, disabledActive: lightObj.disabled }">{{
-          equipStateGroup.disableCount
-        }}</span>
-        <span :class="{ text: true, disabledActive: lightObj.disabled }"
-          >停用设备</span
+        <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3"
+          ><div class="faultAmount stateCommon">
+            <div class="icon" @click="updataList('fault')">
+              <img src="../assets/image/guzhang.svg" alt="" />
+            </div>
+            <span :class="{ number: true, falutActive: lightObj.fault }">{{
+              equipStateGroup.faultCount
+            }}</span>
+            <span :class="{ text: true, falutActive: lightObj.fault }"
+              >故障设备</span
+            >
+          </div></el-col
         >
-      </div></el-col
-    >
+        <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3"
+          ><div class="disableAmount stateCommon">
+            <div class="icon" @click="updataList('disabled')">
+              <img src="../assets/image/tingyong.svg" alt="" />
+            </div>
+            <span
+              :class="{ number: true, disabledActive: lightObj.disabled }"
+              >{{ equipStateGroup.disableCount }}</span
+            >
+            <span :class="{ text: true, disabledActive: lightObj.disabled }"
+              >停用设备</span
+            >
+          </div></el-col
+        >
+        <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
+          <div class="disableAmount stateCommon">
+            <div class="icon" @click="updataList('noinstall')">
+              <img src="../assets/image/noinstall.svg" alt="" />
+            </div>
+            <span
+              :class="{ number: true, noinstallActive: lightObj.noinstall }"
+              >{{
+                equipStateGroup.unInstallCount
+                  ? equipStateGroup.unInstallCount
+                  : 0
+              }}</span
+            >
+            <span :class="{ text: true, noinstallActive: lightObj.noinstall }"
+              >未装设备</span
+            >
+          </div>
+        </el-col>
+      </el-row>
+    </el-col>
   </el-row>
   <!-- </div> -->
   <!-- 状态概览结束 -->
@@ -274,6 +299,26 @@
             </div>
           </el-col>
         </swiper-slide>
+        <swiper-slide>
+          <el-col style="width:100%;height:100%" :xs="6" :sm="6">
+            <div class="itemWrap">
+              <div class="imgWrap" @click="updataList('noinstall')">
+                <img src="../assets/image/noinstall.svg" alt="" />
+              </div>
+              <span
+                :class="{ number: true, noinstallActive: lightObj.noinstall }"
+                >{{
+                  equipStateGroup.unInstallCount
+                    ? equipStateGroup.unInstallCount
+                    : 0
+                }}</span
+              >
+              <span :class="{ text: true, noinstallActive: lightObj.noinstall }"
+                >未装设备</span
+              >
+            </div>
+          </el-col>
+        </swiper-slide>
       </swiper>
     </el-col>
   </el-row>
@@ -387,6 +432,7 @@ export default {
         standby: false,
         fault: false,
         disabled: false,
+        noinstall: false,
       },
     };
   },
@@ -543,6 +589,9 @@ export default {
         case "disabled":
           this.changeFlag(state);
           break;
+        case "noinstall":
+          this.changeFlag(state);
+          break;
         default:
           break;
       }
@@ -559,9 +608,6 @@ export default {
         }
       });
     },
-    // equipTypeChange(data) {
-    //   console.log(data);
-    // },
   },
 };
 </script>
@@ -860,14 +906,14 @@ export default {
   //   }
   // }
   .monitorCol {
-    height: 220px;
+    height: 280px;
     .monitorOverview {
       height: 100%;
     }
   }
   @media screen and(min-width:768px) {
     .monitorCol {
-      height: 260px;
+      height: 300px;
     }
   }
   @media screen and (min-width: 992px) {
@@ -946,35 +992,7 @@ export default {
     margin-top: 1.074%;
   }
 }
-// 状态概览以下样式xs结束
-// 中间区域开始
 
-// 中间区域结束
-
-// 底部区域开始
-// .footerWrap {
-//   width: 100%;
-//   height: 50%;
-//   min-height: 540px;
-//   .el-col:nth-child(1) {
-//     background-color: #1C1F30;
-//   }
-//   .el-col:nth-child(2) {
-//     padding-left: 1%;
-//     .equipmentList {
-//       width: 100%;
-//       height: 100%;
-//     }
-//   }
-//   .chart {
-//     width: 100%;
-//     height: 100%;
-//     #lineChart {
-//       width: 100%;
-//       height: 100%;
-//     }
-//   }
-// }
 .allActive {
   color: #15b6b0 !important;
 }
@@ -994,6 +1012,9 @@ export default {
   color: #0099ff !important;
 }
 .disabledActive {
+  color: #0099ff !important;
+}
+.noinstallActive {
   color: #0099ff !important;
 }
 

@@ -285,66 +285,26 @@ export default {
         );
       });
     });
-    // 监听兄弟组件search注册的事件，获取兄弟组件传过来的数据（设备编码）
-    eventBus.on("queryEquipInfo", (data) => {
-      this.monitorToDetailEquipCode = "";
-      this.currentEquipCode = data.currentEquipCode;
-      this.currentProjectCode = data.currentProjectCode;
-      this.currentEquipInfo(this.currentEquipCode, this.currentProjectCode);
-
-      if (this.previousEquipCode !== "") {
-        // 点击查询后，注销上一个设备
-        this.probeCommercialConnection.server.deregisterEquipment(
-          this.previousEquipCode
-        );
-        this.previousEquipCode = data.currentEquipCode;
-        if (this.chartContainer) {
-          this.chartContainer.dispose();
-        }
-
-        let container = document.getElementsByClassName("chart")[0];
-        setTimeout(() => {
-          if (container) {
-            this.chartContainer = echarts.init(container);
-            this.boardDataOption.series[0].endAngle = -180;
-            // 初始化仪表盘状态
-            unwarp(this.chartContainer).setOption(this.boardDataOption);
-          }
-        }, 50);
-        this.probeCommercialConnection.server.registerEquipment(
-          this.currentEquipCode
-        );
-        // 初始化设备工作状态
-        this.workState = "";
-        // 初始化工作状态图
-        this.imgSrc = require("../../assets/image/stop.gif");
-      } else {
-        // 点击查询后，注册新设备
-        this.probeCommercialConnection.server.registerEquipment(
-          this.currentEquipCode
-        );
-        // 初始化设备工作状态
-        this.workState = "";
-        // 初始化工作状态图
-        this.imgSrc = require("../../assets/image/stop.gif");
-        // 初始化仪表盘状态
-        this.boardDataOption.series[0].endAngle = -180;
-        unwarp(this.chartContainer).setOption(this.boardDataOption);
-        this.previousEquipCode = data.currentEquipCode;
-      }
-    });
   },
   mounted() {
     // 初始化仪表盘数据
     this.boardDataOption = this.getOptions();
     let container = document.getElementsByClassName("chart")[0];
     this.chartContainer = echarts.init(container);
-    this.boardDataOption &&
-      unwarp(this.chartContainer).setOption(this.boardDataOption);
+    this.$nextTick(() => {
+      this.boardDataOption &&
+        unwarp(this.chartContainer).setOption(this.boardDataOption);
+    });
+
     // window.addEventListener('resize', function() {
     //   // 监听窗口缩放事件，将echarts图自适应
     //   copyThis.chartContainer.resize();
     // })
+  },
+  unmounted() {
+    if (this.chartContainer) {
+      this.chartContainer.dispose();
+    }
   },
   watch: {
     boardDataOption: {
@@ -609,6 +569,54 @@ export default {
       });
       if (res.status === 200 && res.data.resultCode == "0000") {
         this.equipDetailInfo = res.data.data;
+      }
+    },
+    // 提供给父组件触发的方法，重新渲染页面
+    handleAgainRender(data) {
+      this.monitorToDetailEquipCode = "";
+      this.currentEquipCode = data.currentEquipCode;
+      this.currentProjectCode = data.currentProjectCode;
+      this.currentEquipInfo(this.currentEquipCode, this.currentProjectCode);
+
+      if (this.previousEquipCode !== "") {
+        // 点击查询后，注销上一个设备
+        this.probeCommercialConnection.server.deregisterEquipment(
+          this.previousEquipCode
+        );
+        this.previousEquipCode = data.currentEquipCode;
+        if (this.chartContainer) {
+          this.chartContainer.dispose();
+        }
+
+        let container = document.getElementsByClassName("chart")[0];
+        setTimeout(() => {
+          if (container) {
+            this.chartContainer = echarts.init(container);
+            this.boardDataOption.series[0].endAngle = -180;
+            // 初始化仪表盘状态
+            unwarp(this.chartContainer).setOption(this.boardDataOption);
+          }
+        }, 50);
+        this.probeCommercialConnection.server.registerEquipment(
+          this.currentEquipCode
+        );
+        // 初始化设备工作状态
+        this.workState = "";
+        // 初始化工作状态图
+        this.imgSrc = require("../../assets/image/stop.gif");
+      } else {
+        // 点击查询后，注册新设备
+        this.probeCommercialConnection.server.registerEquipment(
+          this.currentEquipCode
+        );
+        // 初始化设备工作状态
+        this.workState = "";
+        // 初始化工作状态图
+        this.imgSrc = require("../../assets/image/stop.gif");
+        // 初始化仪表盘状态
+        this.boardDataOption.series[0].endAngle = -180;
+        unwarp(this.chartContainer).setOption(this.boardDataOption);
+        this.previousEquipCode = data.currentEquipCode;
       }
     },
   },

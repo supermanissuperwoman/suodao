@@ -33,20 +33,7 @@ export default {
       riskLevel: [],
     };
   },
-  created() {
-    eventBus.on("getCode", (data) => {
-      this.projectCode = data.currentProjectCode;
-      this.reportDate = data.reportDate;
-      if (data.isWeekDisable) {
-        this.healthContainer.dispose();
-        this.lightContainer.dispose();
-        this.middleContainer.dispose();
-        this.heavyContainer.dispose();
-        this.outContainer.dispose();
-        this.getImageData(this.projectCode, this.reportDate);
-      }
-    });
-  },
+
   mounted() {
     let healthDom = document.getElementsByClassName("health")[0];
     let lightDom = document.getElementsByClassName("light")[0];

@@ -40,12 +40,6 @@ export default {
     let copythis = this;
     let chartContainer = document.getElementsByClassName("chartContainer")[0];
     this.container = echarts.init(chartContainer);
-    // this.damageResultOptions && unwarp(this.container).setOption(this.damageResultOptions);
-    // 监听search组件注册事件，得到设备编码
-    eventBus.on("queryEquipInfo", (data) => {
-      console.log(data);
-      this.currentEquipDamageOptions(data.currentEquipCode);
-    });
   },
   methods: {
     myResize() {

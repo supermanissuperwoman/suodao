@@ -35,18 +35,10 @@ export default {
     this.barOptions = this.optionsInit();
     // 获取从全局概览页面跳转过来的设备的图表数据
     this.getEquipDamageValue();
-    eventBus.on("queryEquipInfo", (data) => {
-      this.currentEquipBarOptions(data.currentEquipCode);
-    });
   },
   mounted() {
     let container = document.getElementsByClassName("barContainer")[0];
     this.barContainer = echarts.init(container);
-    //   this.barOptions && this.barContainer.setOption(this.barOptions);
-    // 监听search组件注册事件，得到设备编码
-    //   eventBus.on('queryEquipInfo', data => {
-    //     this.currentEquipBarOptions(data.currentEquipCode);
-    //   })
   },
   methods: {
     myResize() {
@@ -60,7 +52,7 @@ export default {
         },
 
         grid: {
-          right: "86px",
+          right: "95px",
           bottom: "28px",
           left: "30px",
           top: "12%",
@@ -201,7 +193,7 @@ export default {
         this.barOptions.xAxis[0].data = this.xData;
         this.barOptions.series[0].data = this.yData;
         // 通过回调函数设备tooltip提示框
-        this.barOptions.tooltip.formatter = function (params) {
+        this.barOptions.tooltip.formatter = function(params) {
           let str = "";
           str = "损伤区间: " + params.name + "<br />" + "次数: " + params.data;
           return str;
@@ -219,7 +211,7 @@ export default {
 };
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .el-row {
   width: 100%;
   height: 100%;

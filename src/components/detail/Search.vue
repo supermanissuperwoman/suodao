@@ -138,6 +138,8 @@ export default {
       currentProjectCode: "",
       // 当前设备的设备编码
       currentEquipCode: "",
+      // 当前设备的有效时间
+      currentEquipValidTime: "",
       // 记录点击查询事件
       isClickSearch: false,
       //
@@ -240,7 +242,7 @@ export default {
         getItem("equipData").equipmentCode,
         true
       );
-      this.getComponentFlag(getItem("equipData").equipmentCode);
+      this.getComponentFlag(getItem("equipData").equipmentModel);
     }
 
     document.addEventListener("click", this.documentClick);
@@ -281,6 +283,8 @@ export default {
           let options = { value: "", label: "" };
           options.value = data[i].equipmentCode;
           options.label = data[i].equipmentName;
+          options.model = data[i].equipmentModel;
+          options.validTime = data[i].validTime;
           this.equipOptions.push(options);
         }
         // 激活设备查询框
@@ -290,9 +294,9 @@ export default {
       this.buttonFlag = true;
     },
     // 判断设备类型，改变组件展示标志
-    getComponentFlag(equipmentCode) {
+    getComponentFlag(equipmentModel) {
       let flag = "";
-      if (equipmentCode == "6143f67cf80a12edc1314d92") {
+      if (equipmentModel != "IOT01B") {
         flag = "suodao";
       } else {
         flag = "nosuodao";
@@ -301,9 +305,13 @@ export default {
     },
     // 获取当前设备的设备编码及所属项目的项目编码
     async getCurrentEquipCode(equipmentCode) {
+      let equipData = this.equipOptions.filter((item) => {
+        return item.value == equipmentCode;
+      });
+      this.currentEquipValidTime = equipData[0].validTime;
       this.isClickSearch = false;
       this.currentEquipCode = equipmentCode;
-      this.getComponentFlag(equipmentCode);
+      this.getComponentFlag(equipData[0].model);
       // 如果当前项目编码为空，说明是从全局概览页面跳转而来，则路由中携带的项目编码即为当前的项目编码
       if (this.currentProjectCode == "") {
         this.currentProjectCode = this.$route.params.projectCode;
@@ -315,13 +323,23 @@ export default {
     // 注册设备信息查询的方法，传递数据给兄弟组件
     queryEquipInfo() {
       this.isClickSearch = true;
-      // 查询传感器编码器信息
-      this.querySonserEncodeInfor();
-      eventBus.emit("clickSearch", { isClickSearch: this.isClickSearch });
-      eventBus.emit("queryEquipInfo", {
-        currentEquipCode: this.currentEquipCode,
-        currentProjectCode: this.currentProjectCode,
-      });
+      let currentTime = new Date().getTime();
+      let validTime = new Date(this.currentEquipValidTime).getTime();
+      if (currentTime < validTime) {
+        // 查询传感器编码器信息
+        this.querySonserEncodeInfor();
+        eventBus.emit("clickSearch", { isClickSearch: this.isClickSearch });
+
+        this.$emit("queryEquipInfo", {
+          currentEquipCode: this.currentEquipCode,
+          currentProjectCode: this.currentProjectCode,
+        });
+      } else {
+        this.$message({
+          type: "warning",
+          message: "设备已到期，不允许查看详情，请续费",
+        });
+      }
     },
 
     // 绑定搜索的内容
@@ -331,6 +349,7 @@ export default {
       this.currentEquipCode = data.equipmentCode;
       this.currentProjectName = data.projectName;
       this.currentProjectCode = data.projectCode;
+      this.currentEquipValidTime = data.validTime;
       const res = await this.$http.post(this.$urlObj.queryEquip, {
         userCode: getItem("userData").userCode,
         projectCode: data.projectCode,

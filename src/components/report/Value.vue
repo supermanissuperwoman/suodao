@@ -24,14 +24,9 @@ export default {
     };
   },
   created() {
-    eventBus.on("getCode", (data) => {
-      if (!data.isWeekDisable) {
-        // this.chartContainer.dispose();
-        this.getDamageOptions(data.currentEquipCode, data.reportDate);
-      }
-    });
     this.chartOptions = this.optionsInit();
   },
+
   mounted() {
     let container = document.getElementsByClassName("valueContainer")[0];
     this.chartContainer = echarts.init(container);
@@ -52,7 +47,7 @@ export default {
 
         grid: {
           right: "75px",
-          bottom: "10%",
+          bottom: "7%",
           left: "30px",
           top: "14%",
         },
@@ -194,7 +189,7 @@ export default {
     font-weight: bold;
   }
   .valueContainer {
-    height: 81.25%;
+    height: 84.25%;
     // min-height: 378px;
     width: 100%;
     background-color: #1c1f30;

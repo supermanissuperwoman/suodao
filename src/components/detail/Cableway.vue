@@ -1,25 +1,25 @@
 <template>
   <el-row>
     <el-col :lg="12" id="overviewCol">
-      <cableway-overview></cableway-overview>
+      <cableway-overview ref="cabelOverviewRef"></cableway-overview>
     </el-col>
     <el-col :lg="12" id="monitorResultCol">
-      <div class="monitorResultColTop">
-        <div class="topLeft">
+      <el-row class="monitorResultColTop">
+        <el-col :xs="24" :lg="14" class="topLeft">
           <monitor-result ref="monitorRef"></monitor-result>
-        </div>
-        <div class="topRight">
+        </el-col>
+        <el-col :xs="24" :lg="10" class="topRight">
           <damage-list ref="damageListRef"> </damage-list>
-        </div>
-      </div>
-      <div class="monitorResultColDown">
-        <div class="topLeft">
+        </el-col>
+      </el-row>
+      <el-row class="monitorResultColDown">
+        <el-col :xs="24" :lg="14" class="topLeft">
           <joint ref="jointRef"></joint>
-        </div>
-        <div class="topRight">
-          <joint-list></joint-list>
-        </div>
-      </div>
+        </el-col>
+        <el-col :xs="24" :lg="10" class="topRight">
+          <joint-list ref="jointListRef"></joint-list>
+        </el-col>
+      </el-row>
     </el-col>
     <el-col :lg="12" id="damagevalueCol">
       <damage-value ref="damageValueRef"></damage-value>
@@ -75,43 +75,61 @@ export default {
 .el-row {
   width: 100%;
   #overviewCol {
-    height: 500px;
+    height: 700px;
     margin-bottom: 20px;
   }
+  @media screen and (min-width: 900px) {
+    #overviewCol {
+      height: 600px;
+    }
+  }
   @media screen and (min-width: 1200px) {
-    .overviewCol {
-      padding-right: 11px;
+    #overviewCol {
+      height: 500px;
     }
   }
   #monitorResultCol {
-    height: 600px;
-    display: flex;
-    margin-bottom: 20px;
-    flex-direction: column;
-    justify-content: space-between;
     .monitorResultColTop {
-      flex: 1;
-      display: flex;
-      justify-content: space-between;
-      padding-bottom: 10px;
+      height: 800px;
+      margin-bottom: 20px;
       .topLeft {
-        flex: 5;
+        height: 30%;
       }
       .topRight {
-        flex: 3;
+        height: 70%;
+      }
+    }
+    @media screen and (min-width: 1200px) {
+      .monitorResultColTop {
+        height: 250px;
+        margin-bottom: 10px;
+        .topLeft {
+          height: 100%;
+        }
+        .topRight {
+          height: 100%;
+        }
       }
     }
     .monitorResultColDown {
-      flex: 1;
+      height: 500px;
       background-color: #1c1f30;
-      display: flex;
-      justify-content: space-between;
-      padding-bottom: 10px;
+      margin-bottom: 20px;
       .topLeft {
-        flex: 5;
+        height: 50%;
       }
       .topRight {
-        flex: 3;
+        height: 50%;
+      }
+    }
+    @media screen and (min-width: 1200px) {
+      .monitorResultColDown {
+        margin-bottom: 0;
+        height: 240px;
+        .topLeft,
+        .topRight {
+          height: 100%;
+        }
       }
     }
   }
@@ -130,11 +148,7 @@ export default {
       background-color: #fff;
     }
   }
-  @media screen and (min-width: 1200px) {
-    #damagevalueCol {
-      height: 300px;
-    }
-  }
+
   #godistanceCol {
     height: 320px;
     div {
@@ -146,7 +160,6 @@ export default {
   @media screen and (min-width: 1200px) {
     #godistanceCol {
       padding-left: 11px;
-      height: 300px;
     }
   }
 }

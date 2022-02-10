@@ -4,7 +4,7 @@
       <div class="overviewTitle">实时监测概览</div>
       <div class="tableWrap">
         <table cellspacing="0">
-          <tbody>
+          <tbody class="big" v-if="isShow">
             <tr>
               <td>项目: {{ overviewData.projectName }}</td>
               <td>设备: {{ overviewData.equipmentName }}</td>
@@ -16,11 +16,46 @@
                 <div>
                   实时风险：
                 </div>
-                <div
-                  style="position: absolute;width: 50%;right: 10px;
-                  height: 100%;
-                top: 0;"
-                >
+                <div class="barAnimationWrap">
+                  <bar-animation :percentData="percentData"></bar-animation>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>地址: {{ overviewData.installLocation }}</td>
+              <td>运行状态：{{ workState }}</td>
+              <td>安装时间: {{ overviewData.installDate }}</td>
+              <td>到期时间: {{ overviewData.validTime }}</td>
+            </tr>
+            <tr>
+              <td>识别码序列号：{{ overviewData.serials }}</td>
+
+              <td>工作状态：{{ workingZh(overviewData.workingStatus) }}</td>
+              <td>平均损伤值: {{ overviewData.avgDamage }}</td>
+              <td>损伤个数：{{ overviewData.damageCount }}</td>
+            </tr>
+            <tr>
+              <td>当日运行里程: {{ overviewData.runningDistance }}&nbsp; km</td>
+              <td>当日运行时长: {{ overviewData.runningTime }} &nbsp;h</td>
+              <td>是否报警：否</td>
+              <td>责任人: {{ overviewData.contactPerson }}</td>
+            </tr>
+          </tbody>
+          <tbody class="small" v-if="!isShow">
+            <tr>
+              <td>项目: {{ overviewData.projectName }}</td>
+              <td>设备: {{ overviewData.equipmentName }}</td>
+            </tr>
+            <tr>
+              <td>风险程度: {{ translateZh(overviewData.riskLevel) }}</td>
+              <td
+                style="position: relative;
+              "
+              >
+                <div>
+                  实时风险：
+                </div>
+                <div class="barAnimationWrap">
                   <bar-animation :percentData="percentData"></bar-animation>
                 </div>
               </td>
@@ -28,26 +63,32 @@
             <tr>
               <td>识别码序列号：{{ overviewData.serials }}</td>
               <td>地址: {{ overviewData.installLocation }}</td>
+            </tr>
+            <tr>
               <td>安装时间: {{ overviewData.installDate }}</td>
               <td>到期时间: {{ overviewData.validTime }}</td>
             </tr>
             <tr>
               <td>运行状态：运行</td>
               <td>工作状态：{{ workingZh(overviewData.workingStatus) }}</td>
+            </tr>
+            <tr>
               <td>平均损伤值: {{ overviewData.avgDamage }}</td>
               <td>损伤个数：{{ overviewData.damageCount }}</td>
             </tr>
             <tr>
               <td>当日运行里程: {{ overviewData.runningDistance }} km</td>
               <td>当日运行时长: {{ overviewData.runningTime }} h</td>
-              <td>是否报警：{{ overviewData.equipmentName }}</td>
+            </tr>
+            <tr>
+              <td>是否报警：否</td>
               <td>责任人: {{ overviewData.contactPerson }}</td>
             </tr>
           </tbody>
         </table>
       </div>
       <div class="gifWrap">
-        <img src="../../../assets/image/suodaogif.png" alt="" />
+        <img :src="imgSrc" alt="" />
       </div>
     </el-col>
   </el-row>
@@ -71,23 +112,44 @@ export default {
       signalrInstance: null,
       overviewData: {},
       percentData: 1,
+      // 动图地址
+      imgSrc: require("../../../assets/image/clockstop.gif"),
+      // 运行状态
+      workState: "",
+      // 是否显示实时风险
+      isShow: true,
     };
   },
   created() {
-    // 监听查询事件
-    eventBus.on("queryEquipInfo", (data) => {
-      console.log(data);
-      this.getOverviewData(data.currentProjectCode, data.currentEquipCode);
-      // 注册设备
-      this.signalrInstance.server.registerEquipment(data.currentEquipCode);
-    });
-    if (getItem("equipData")) {
-      let data = getItem("equipData");
-      this.getOverviewData(data.projectCode, data.equipmentCode);
-    }
+    let index = -1;
+    setInterval(() => {
+      if (index == 3) {
+        index = -1;
+      }
+      index++;
+      if (index == 0) {
+        this.imgSrc = require("../../../assets/image/clockstop.gif");
+      }
+      if (index == 1) {
+        this.imgSrc = require("../../../assets/image/anticlockwise.gif");
+      }
+      if (index == 3) {
+        this.imgSrc = require("../../../assets/image/clockwise.gif");
+      }
+    }, 2000);
   },
   mounted() {
     this.initSignlarConnection();
+    this.watchResize();
+    window.addEventListener("resize", this.watchResize);
+    // 如果从监控概览跳转而来，那么请求数据
+    if (JSON.stringify(getItem("equipData")) != "{}") {
+      let { projectCode, equipmentCode } = getItem("equipData");
+      this.getOverviewData(projectCode, equipmentCode);
+    }
+  },
+  unmounted() {
+    window.removeEventListener("resize", this.watchResize);
   },
   methods: {
     // 请求概览数据
@@ -100,7 +162,6 @@ export default {
       if (res.status == 200 && res.data.resultCode == "0000") {
         this.overviewData = res.data.data;
       }
-      console.log(res);
     },
     // 风险程度中文描述
     translateZh(status) {
@@ -175,10 +236,20 @@ export default {
       this.connectSignlar();
     },
     getEncodeDirection(equipmentCode, direction, isMoving) {
-      console.log(equipmentCode, direction, isMoving);
+      if (isMoving == 0) {
+        this.workState = "停止";
+        this.imgSrc = require("../../../assets/image/clockstop.gif");
+      }
+      if (isMoving != 0 && direction == 0) {
+        this.workState = "逆时针";
+        this.imgSrc = require("../../../assets/image/anticlockwise.gif");
+      }
+      if (isMoving != 0 && direction == 1) {
+        this.workState = "顺时针";
+        this.imgSrc = require("../../../assets/image/clockwise.gif");
+      }
     },
     getAlarmData(SerialAndID, result) {
-      console.log(SerialAndID, result);
       this.percentData = result / 10;
     },
     // 连接signlar
@@ -186,7 +257,6 @@ export default {
       $.connection.hub
         .start()
         .done(() => {
-          console.log(this);
           // // 参数不为空对象执行的操作
           // if (JSON.stringify(getItem("equipData")) != "null") {
           //   // 获取从监控概览页面传递过来的设备编码
@@ -210,6 +280,20 @@ export default {
         .fail(function() {
           console.log("连接失败");
         });
+    },
+    // 监听窗口大小事件
+    watchResize() {
+      if (document.body.clientWidth < 900) {
+        this.isShow = false;
+      } else {
+        this.isShow = true;
+      }
+    },
+    // 提供给父组件调用，重新渲染页面
+    handleAgainRender(data) {
+      this.getOverviewData(data.currentProjectCode, data.currentEquipCode);
+      // 注册设备
+      this.signalrInstance.server.registerEquipment(data.currentEquipCode);
     },
   },
 };
@@ -247,6 +331,49 @@ export default {
           height: 44px;
           padding-left: 4px;
           box-sizing: border-box;
+        }
+      }
+    }
+    .big {
+      width: 100%;
+      .barAnimationWrap {
+        position: absolute;
+        right: 30%;
+        width: 40%;
+        height: 100%;
+        top: 0;
+      }
+      @media screen and (min-width: 900px) {
+        .barAnimationWrap {
+          right: 10%;
+        }
+      }
+      @media screen and (min-width: 1200px) {
+        .barAnimationWrap {
+          right: 0;
+          width: 32%;
+        }
+      }
+      @media screen and (min-width: 1768px) {
+        .barAnimationWrap {
+          width: 40%;
+          right: 10%;
+        }
+      }
+    }
+
+    .small {
+      width: 100%;
+      .barAnimationWrap {
+        position: absolute;
+        width: 50%;
+        right: 10%;
+        height: 100%;
+        top: 0;
+      }
+      @media screen and (min-width: 768px) {
+        .barAnimationWrap {
+          right: 18%;
         }
       }
     }

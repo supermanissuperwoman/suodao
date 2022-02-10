@@ -75,13 +75,7 @@ export default {
       reportDate: "",
     };
   },
-  created() {
-    eventBus.on("getCode", (data) => {
-      this.projectCode = data.currentProjectCode;
-      this.reportDate = data.reportDate;
-      this.getImageData();
-    });
-  },
+
   methods: {
     // 控制表格单双行背景色
     tableRowClassName({ row, rowIndex }) {
@@ -91,10 +85,10 @@ export default {
       return "odd";
     },
     // 请求数据
-    async getImageData() {
+    async getImageData(projectCode, reportDate) {
       const res = await this.$http.post(this.$urlObj.queryImageContent, {
-        projectCode: this.projectCode,
-        reportDate: this.reportDate,
+        projectCode,
+        reportDate,
       });
       if (
         res.status === 200 &&
@@ -181,9 +175,7 @@ export default {
   text-align: center;
   font-size: 14px;
 }
-.el-table__body-wrapper {
-  //  height: 86% !important;
-}
+
 :deep(.el-table__body-wrapper::-webkit-scrollbar) {
   height: 3px !important;
 }

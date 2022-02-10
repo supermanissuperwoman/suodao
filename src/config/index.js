@@ -2,10 +2,10 @@
 
 // const BASE_URL = "192.168.111.7";
 // const WS_PORT = "8506";
-// const BASE_URL = '47.101.177.0';
-// const WS_PORT = '9000';
-const BASE_URL = "47.100.48.219";
+const BASE_URL = "47.101.177.0";
 const WS_PORT = "9000";
+// const BASE_URL = "47.100.48.219";
+// const WS_PORT = "9000";
 const COMMON = "portal";
 const WS_ADDRESS = `http://${BASE_URL}:${WS_PORT}`;
 // 查询设备

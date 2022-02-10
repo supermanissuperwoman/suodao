@@ -109,7 +109,7 @@ import { eventBus } from "@ai-zen/event-bus";
 import { getItem } from "../../api";
 export default {
   name: "SelectReport",
-  emits: ["equipChange", "changeComponent"],
+  emits: ["equipChange", "changeComponent", "getCode"],
   data() {
     return {
       // 项目下拉框数据
@@ -209,12 +209,12 @@ export default {
           cache = {};
           cache.equipmentName = data[i].equipmentName;
           cache.value = data[i].equipmentCode;
+          cache.equipmentModel = data[i].equipmentModel;
           this.equipOptions.push(cache);
         }
-        let flag = data[0].equipmentCode == "6143f67cf80a12edc1314d92";
+        let flag = data[0].equipmentModel == "IOT01B";
 
-        console.log(flag);
-        if (!flag) {
+        if (flag) {
           equipType = "nosuodao";
         } else {
           equipType = "suodao";
@@ -250,7 +250,6 @@ export default {
       this.currentEquipCode = data.value;
       // 取消日期选择框禁用
       this.isDateDisable = false;
-      console.log(data);
       this.$emit("equipChange", { data: data, date: this.dateValue });
       // if(data.value == "6143f67cf80a12edc1314d92") {
 
@@ -347,7 +346,14 @@ export default {
     searchReport() {
       this.isShowBtnBgc = true;
       this.isDisableBtn = false;
-      eventBus.emit("getCode", {
+      // eventBus.emit("getCode", {
+      //   currentEquipCode: this.currentEquipCode,
+      //   currentProjectCode: this.currentProjectCode,
+      //   reportDate: this.dateValue,
+      //   isWeekDisable: this.isWeekReport,
+      //   standardDate: this.standardDate,
+      // });
+      this.$emit("getCode", {
         currentEquipCode: this.currentEquipCode,
         currentProjectCode: this.currentProjectCode,
         reportDate: this.dateValue,

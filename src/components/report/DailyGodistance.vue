@@ -26,18 +26,13 @@ export default {
     };
   },
   created() {
-    eventBus.on("getCode", (data) => {
-      if (!data.isWeekDisable) {
-        // this.chartContainer.dispose();
-        this.getDistanceOptions(data.currentEquipCode, data.reportDate);
-      }
-    });
     this.chartOptions = this.getOptions();
   },
   mounted() {
     let container = document.getElementsByClassName("distanceContainer")[0];
     this.container = echarts.init(container);
   },
+
   methods: {
     myResize() {
       if (this.container) {
@@ -97,7 +92,7 @@ export default {
         },
         grid: {
           right: "50px",
-          bottom: "26px",
+          bottom: "7%",
           left: "50px",
           top: "12%",
         },
@@ -228,7 +223,7 @@ export default {
     font-weight: bold;
   }
   .distanceContainer {
-    height: 81.25%;
+    height: 82.25%;
     // min-height: 378px;
     width: 100%;
     background-color: #1c1f30;

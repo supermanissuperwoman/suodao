@@ -5,6 +5,7 @@
         ref="selectRef"
         @equipChange="equipChange"
         @changeComponent="changeComponent"
+        @getCode="handleSelectClickSearch"
       ></select-report>
     </el-col>
   </el-row>
@@ -196,8 +197,7 @@ export default {
   methods: {
     // 监测日报界面设备类型变化 展示索道相关组件
     equipChange(data) {
-      console.log(data);
-      if (data.data.value == "6143f67cf80a12edc1314d92") {
+      if (data.data.equipmentModel != "IOT01B") {
         this.isShowJoint = true;
         this.valueColLg = 7;
       } else {
@@ -205,10 +205,11 @@ export default {
         this.valueColLg = 14;
       }
       if (data.date) {
-        console.log(this.$refs.jointRef);
         this.$refs.valueRef.getDamageOptions(data.data.value, data.date);
+        this.$refs.dailyRef.getEquipInfo(data.data.value, data.date);
+        this.$refs.listRef.getTopTenDamageValue(data.data.value, data.date);
+        this.$refs.distanceRef.getDistanceOptions(data.data.value, data.date);
         this.$nextTick(() => {
-          console.log(this.$refs.jointRef);
           if (this.$refs.jointRef) {
             this.$refs.jointRef.currentEquipDamageOptions(data.data.value);
           }
@@ -217,11 +218,76 @@ export default {
     },
     // 监测周报界面设备类型变化 展示索道相关组件
     changeComponent(data) {
-      console.log(data);
       if (data == "suodao") {
         this.isShowWeekJoint = true;
       } else {
         this.isShowWeekJoint = false;
+      }
+    },
+    // 监听select子组件点击查询按钮发出的自定义事件
+    handleSelectClickSearch(data) {
+      // 发出自定义
+      if (this.$refs.refAverageValue) {
+        this.$refs.refAverageValue.getImageData(
+          data.currentProjectCode,
+          data.reportDate
+        );
+      }
+      if (this.$refs.refState) {
+        this.$refs.refState.healthContainer.dispose();
+        this.$refs.refState.lightContainer.dispose();
+        this.$refs.refState.middleContainer.dispose();
+        this.$refs.refState.heavyContainer.dispose();
+        this.$refs.refState.outContainer.dispose();
+        this.$refs.refState.getImageData(
+          data.currentProjectCode,
+          data.reportDate
+        );
+      }
+      if (this.$refs.refMileageTime) {
+        this.$refs.refMileageTime.getImageData(
+          data.currentProjectCode,
+          data.reportDate
+        );
+      }
+      if (this.$refs.stateListRef) {
+        this.$refs.stateListRef.getImageData(
+          data.currentProjectCode,
+          data.reportDate
+        );
+      }
+      if (this.$refs.jointRef) {
+        this.$refs.jointRef.getDamageValue(data.currentEquipCode);
+      }
+      if (this.$refs.jointPercentRef) {
+        this.$refs.jointPercentRef.getImageData(
+          data.currentProjectCode,
+          data.reportDate
+        );
+      }
+      if (this.$refs.dailyRef) {
+        this.$refs.dailyRef.getEquipInfo(
+          data.currentEquipCode,
+          data.reportDate
+        );
+      }
+      if (this.$refs.listRef) {
+        this.$refs.listRef.getTopTenDamageValue(
+          data.currentEquipCode,
+          data.reportDate
+        );
+      }
+      if (this.$refs.distanceRef) {
+        this.$refs.distanceRef.getDistanceOptions(
+          data.currentEquipCode,
+          data.reportDate
+        );
+      }
+      if (this.$refs.valueRef) {
+        this.$refs.valueRef.getDamageOptions(
+          data.currentEquipCode,
+          data.reportDate
+        );
       }
     },
   },
@@ -257,15 +323,19 @@ export default {
   height: 400px;
 }
 .valueCol {
-  height: 400px;
+  height: 320px;
   width: 100%;
   margin-top: 20px;
 }
 .jointCol {
-  height: 400px;
+  height: 320px;
   width: 100%;
   margin-top: 20px;
-  padding-left: 20px;
+}
+@media screen and (min-width: 1200px) {
+  .jointCol {
+    padding-left: 20px;
+  }
 }
 @media screen and (min-width: 1200px) {
   .valueCol {
@@ -275,7 +345,7 @@ export default {
   }
 }
 .distanceCol {
-  height: 400px;
+  height: 320px;
   width: 100%;
   margin-top: 20px;
   // background-color: #1c1f30;

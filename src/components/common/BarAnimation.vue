@@ -86,6 +86,7 @@ export default {
   right: -1px;
   transform: translateY(-50%);
   min-width: 50%;
+  max-width: 100%;
   transition: width 1s ease;
 }
 </style>

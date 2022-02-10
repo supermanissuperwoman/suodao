@@ -189,13 +189,7 @@ export default {
       topTenDamageValue: [],
     };
   },
-  created() {
-    eventBus.on("getCode", (data) => {
-      if (!data.isWeekDisable) {
-        this.getTopTenDamageValue(data.currentEquipCode, data.reportDate);
-      }
-    });
-  },
+
   methods: {
     // 获取前十大损伤值列表
     async getTopTenDamageValue(equipmentCode, reportDate) {

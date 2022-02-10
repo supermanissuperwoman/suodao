@@ -30,13 +30,6 @@ export default {
     };
   },
   mounted() {
-    eventBus.on("getCode", (data) => {
-      this.projectCode = data.currentProjectCode;
-      this.reportDate = data.reportDate;
-      if (data.isWeekDisable) {
-        this.getImageData(this.projectCode, this.reportDate);
-      }
-    });
     this.initChartOptions(this.xData, this.yDataPillar, this.yDataLine);
     let dom = document.getElementsByClassName("jointPercentEchartContainer")[0];
     if (dom) {
@@ -60,7 +53,7 @@ export default {
           },
         },
         grid: {
-          right: "65px",
+          right: "80px",
           top: "20%",
           left: "40px",
           bottom: "14%",
@@ -225,10 +218,11 @@ export default {
 .jointPercentRootWrap {
   width: 100%;
   height: 100%;
+  margin-top: 10px;
   background-color: #1c1f30;
   .jointPercentTitle {
     margin-left: 2%;
-    margin-top: 10px;
+    padding-top: 10px;
     color: #fff;
     font-size: 18px;
     font-weight: bold;

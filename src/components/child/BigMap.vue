@@ -1,21 +1,25 @@
 <template>
-    <div v-show="bigMapShow" id="mapBigger" class="mapBigger">
-      <div id="bigMapContainer"></div>
-      <el-select v-model="projectValue" filterable placeholder="请选择"
+  <div v-show="bigMapShow" id="mapBigger" class="mapBigger">
+    <div id="bigMapContainer"></div>
+    <el-select
+      v-model="projectValue"
+      filterable
+      placeholder="请选择"
       :popper-append-to-body="false"
       ref="selectRef"
-      @change="handleSelectChange">
-        <el-option
-          v-for="item in projectGroup"
-          :key="item.value"
-          :label="item.projectName"
-          :value="item"
-        >
-        </el-option>
-      </el-select>
-      <div @click="closeMap" class="closeMap">x</div>
-    </div>
-    <div class="shadowWrap"></div>
+      @change="handleSelectChange"
+    >
+      <el-option
+        v-for="item in projectGroup"
+        :key="item.value"
+        :label="item.projectName"
+        :value="item"
+      >
+      </el-option>
+    </el-select>
+    <div @click="closeMap" class="closeMap">x</div>
+  </div>
+  <div class="shadowWrap"></div>
 </template>
 
 <script>
@@ -37,13 +41,13 @@ export default {
       // 信息窗体
       infoWindow: null,
       // 下拉框选中的值
-      projectValue: ""
+      projectValue: "",
     };
   },
   mounted() {
     window.toDetail = this.toDetail;
-    document.addEventListener('click',(e) => {
-      if(this.markerGroup) {
+    document.addEventListener("click", (e) => {
+      if (this.markerGroup) {
         // this.projectValue = "";
         this.$refs.selectRef.blur();
         // for(let i = 0; i <this.markerGroup.length; i++) {
@@ -58,7 +62,7 @@ export default {
       // if(this.infoWindow) {
       //   this.infoWindow.close();
       // }
-    })
+    });
   },
   watch: {
     projectGroup() {
@@ -92,28 +96,33 @@ export default {
       var copyThis = this;
       let markerGroup = [];
       // 实例化所有的点标记
-      for(let i =0 ; i < this.projectGroup.length; i++) {
+      for (let i = 0; i < this.projectGroup.length; i++) {
         let cache = {};
-        if(typeof(this.projectGroup[i].longitude) !== "undefined"  && typeof(this.projectGroup[i].latitude) !== "undefined") {
+        if (
+          typeof this.projectGroup[i].longitude !== "undefined" &&
+          typeof this.projectGroup[i].latitude !== "undefined"
+        ) {
           cache.marker = new AMap.Marker({
-          // map: that.map,
-          icon: new AMap.Icon({
-            size: new AMap.Size(40, 40),
-            image: require('../../assets/image/dian1.svg'),
-            imageSize: new AMap.Size(40, 40),
-            anchor: 'center'
-          }),
-          position: [this.projectGroup[i].longitude, this.projectGroup[i].latitude],
-          offset: new AMap.Pixel(-13, -30),
-        });
-        cache.projectCode = this.projectGroup[i].projectCode;
-        cache.projectName = this.projectGroup[i].projectName;
-        cache.longitude = this.projectGroup[i].longitude;
-        cache.latitude = this.projectGroup[i].latitude;
-        markerGroup.push(cache);
-        this.markerGroup = markerGroup;
+            // map: that.map,
+            icon: new AMap.Icon({
+              size: new AMap.Size(40, 40),
+              image: require("../../assets/image/dian1.svg"),
+              imageSize: new AMap.Size(40, 40),
+              anchor: "center",
+            }),
+            position: [
+              this.projectGroup[i].longitude,
+              this.projectGroup[i].latitude,
+            ],
+            offset: new AMap.Pixel(-13, -30),
+          });
+          cache.projectCode = this.projectGroup[i].projectCode;
+          cache.projectName = this.projectGroup[i].projectName;
+          cache.longitude = this.projectGroup[i].longitude;
+          cache.latitude = this.projectGroup[i].latitude;
+          markerGroup.push(cache);
+          this.markerGroup = markerGroup;
         }
-        
       }
       // 将所有点标记到地图上
       this.markerClick(markerGroup, copyThis);
@@ -122,58 +131,62 @@ export default {
     markerClick(markerGroup, copyThis) {
       markerGroup.forEach((item) => {
         copyThis.map.add(item.marker);
-        AMap.event.addListener(item.marker, "click", async function () {
+        AMap.event.addListener(item.marker, "click", async function() {
           var str = "";
           copyThis.currentProjectCode = item.projectCode;
           copyThis.projectValue = item.projectName;
-          for(let i = 0; i < markerGroup.length; i++) {
-            markerGroup[i].marker.setIcon(new AMap.Icon({
-            size: new AMap.Size(40,40),
-            image:require('../../assets/image/dian1.svg'),
-            imageSize: new AMap.Size(40, 40),
-            anchor: 'center'
-          }));
-          
+          for (let i = 0; i < markerGroup.length; i++) {
+            markerGroup[i].marker.setIcon(
+              new AMap.Icon({
+                size: new AMap.Size(40, 40),
+                image: require("../../assets/image/dian1.svg"),
+                imageSize: new AMap.Size(40, 40),
+                anchor: "center",
+              })
+            );
           }
-          item.marker.setIcon(new AMap.Icon({
-            size: new AMap.Size(40,40),
-            image:require('../../assets/image/dian2.svg'),
-            imageSize: new AMap.Size(40, 40),
-            anchor: 'center'}))
+          item.marker.setIcon(
+            new AMap.Icon({
+              size: new AMap.Size(40, 40),
+              image: require("../../assets/image/dian2.svg"),
+              imageSize: new AMap.Size(40, 40),
+              anchor: "center",
+            })
+          );
           //在指定位置打开信息窗体
           copyThis.infoWindow = new AMap.InfoWindow({
             isCustom: true, //使用自定义窗体
             autoMove: true,
             offset: new AMap.Pixel(0, -58),
           });
-          
-           const res = await copyThis.$http.post(copyThis.$urlObj.queryEquip,{
-          userCode: getItem("userData").userCode,
-          projectCode: copyThis.currentProjectCode
-          })
-          if(res.status === 200 && res.data.resultCode == '0000') {
+
+          const res = await copyThis.$http.post(copyThis.$urlObj.queryEquip, {
+            userCode: getItem("userData").userCode,
+            projectCode: copyThis.currentProjectCode,
+          });
+          if (res.status === 200 && res.data.resultCode == "0000") {
             let data = res.data.data;
             let projectCode = "";
             let projectName = "";
             let equipmentCode = "";
             let equipmentName = "";
-            for(let i = 0; i < data.length; i++) {
+            for (let i = 0; i < data.length; i++) {
               projectCode = data[i].projectCode;
               projectName = data[i].projectName;
               equipmentCode = data[i].equipmentCode;
               equipmentName = data[i].equipmentName;
+              validTime = data[i].validTime;
               str += `
               <li style='padding:10px 0 10px 15px;cursor:pointer;position:relative;box-sizing:border-box;'
               onMouseOver="this.style.color='#0099ff'"
               onMouseOut="this.style.color='#fff'"
-              onclick="toDetail('${projectCode}','${projectName}','${equipmentCode}','${equipmentName}')">${data[i].equipmentName}
+              onclick="toDetail('${projectCode}','${projectName}','${equipmentCode}','${equipmentName}','${validTime}')">${data[i].equipmentName}
               <span style='position:absolute;right:20px;cursor:pointer;'>></span></li>
-              `
-              
+              `;
             }
-            str = copyThis.createInfoWindow(str,item.projectName);
+            str = copyThis.createInfoWindow(str, item.projectName);
             copyThis.infoWindow.setContent(str);
-          } 
+          }
           copyThis.infoWindow.open(copyThis.map, item.marker.getPosition());
         });
       });
@@ -184,53 +197,56 @@ export default {
       let currentMarker = null;
       let str = "";
       let equipGroup = [];
-      for(let i = 0; i < this.markerGroup.length; i++) {
-        this.markerGroup[i].marker.setIcon(new AMap.Icon({
-            size: new AMap.Size(40,40),
-            image:require('../../assets/image/dian1.svg'),
+      for (let i = 0; i < this.markerGroup.length; i++) {
+        this.markerGroup[i].marker.setIcon(
+          new AMap.Icon({
+            size: new AMap.Size(40, 40),
+            image: require("../../assets/image/dian1.svg"),
             imageSize: new AMap.Size(40, 40),
-            anchor: 'center'
-        }))
-        if(e.projectCode == this.markerGroup[i].projectCode) {
+            anchor: "center",
+          })
+        );
+        if (e.projectCode == this.markerGroup[i].projectCode) {
           let longitude = "";
           let latitude = "";
 
           currentMarker = this.markerGroup[i].marker;
           longitude = this.markerGroup[i].longitude;
           latitude = this.markerGroup[i].latitude;
-          
-          currentMarker.setIcon( new AMap.Icon({
-            size: new AMap.Size(40,40),
-            image:require('../../assets/image/dian2.svg'),
-            imageSize: new AMap.Size(40, 40),
-            anchor: 'center'
-          }));
-          currentMarker.setTop(true)
-          this.map.setCenter([longitude,latitude])
+
+          currentMarker.setIcon(
+            new AMap.Icon({
+              size: new AMap.Size(40, 40),
+              image: require("../../assets/image/dian2.svg"),
+              imageSize: new AMap.Size(40, 40),
+              anchor: "center",
+            })
+          );
+          currentMarker.setTop(true);
+          this.map.setCenter([longitude, latitude]);
           this.infoWindow = new AMap.InfoWindow({
             isCustom: true, //使用自定义窗体
             autoMove: true,
             offset: new AMap.Pixel(0, -58),
           });
-          const res = await this.$http.post(this.$urlObj.queryEquip,{
+          const res = await this.$http.post(this.$urlObj.queryEquip, {
             userCode: getItem("userData").userCode,
-            projectCode: e.projectCode
-          })
-          if(res.status === 200 && res.data.resultCode == '0000') {
+            projectCode: e.projectCode,
+          });
+          if (res.status === 200 && res.data.resultCode == "0000") {
             equipGroup = res.data.data;
-            for(let i = 0; i < equipGroup.length; i++) {
+            for (let i = 0; i < equipGroup.length; i++) {
               str += `
           <li style='padding:10px 0 10px 15px;cursor:pointer;position:relative;box-sizing:border-box;'
           onMouseOver="this.style.color='#0099ff'"
           onMouseOut="this.style.color='#fff'"
-          onclick="toDetail('${equipGroup[i].projectCode}','${equipGroup[i].projectName}','${equipGroup[i].equipmentCode}','${equipGroup[i].equipmentName}')">${equipGroup[i].equipmentName}
+          onclick="toDetail('${equipGroup[i].projectCode}','${equipGroup[i].projectName}','${equipGroup[i].equipmentCode}','${equipGroup[i].equipmentName}','${equipGroup[i].validTime}')">${equipGroup[i].equipmentName}
           <span style='position:absolute;right:20px;cursor:pointer;'>></span></li>
-          `
+          `;
             }
-            
           }
-          
-          str = this.createInfoWindow(str,e.projectName);
+
+          str = this.createInfoWindow(str, e.projectName);
           this.infoWindow.setContent(str);
           this.infoWindow.open(this.map, currentMarker.getPosition());
         }
@@ -253,10 +269,9 @@ export default {
     // 请求项目信息
     async getProjectInfo() {
       // 发送请求获取项目信息
-      const { data: res } = await this.$http.post(
-        this.$urlObj.queryProject,
-        { userCode: getItem("userData").userCode }
-      );
+      const { data: res } = await this.$http.post(this.$urlObj.queryProject, {
+        userCode: getItem("userData").userCode,
+      });
       if (res.resultMessage === "Success") {
         this.initSearch(res.data);
       }
@@ -269,35 +284,55 @@ export default {
       });
     },
     // 跳转到详情页面
-    toDetail(projectCode,projectName,equipmentCode,equipmentName) {
+    toDetail(
+      projectCode,
+      projectName,
+      equipmentCode,
+      equipmentName,
+      validTime
+    ) {
+      let currentTime = new Date().getTime();
+      let validStamp = new Date(validTime).getTime();
       let equipInfo = {
-        "projectCode": projectCode,
-        "projectName": projectName,
-        "equipmentCode": equipmentCode,
-        "equipmentName": equipmentName
+        projectCode: projectCode,
+        projectName: projectName,
+        equipmentCode: equipmentCode,
+        equipmentName: equipmentName,
+        validTime: validTime,
+      };
+      if (currentTime < validStamp) {
+        setItem("equipData", equipInfo);
+        this.$router.push({
+          name: "detail",
+          params: {
+            equipCode: equipmentCode,
+            projectCode: projectCode,
+          },
+        });
+      } else {
+        this.$message({
+          type: "warning",
+          message: "设备已到期，不允许跳转，请续费",
+        });
       }
-      setItem("equipData",equipInfo)
-      this.$router.push({
-         name: 'detail',
-         params: {
-           "equipCode": equipmentCode,
-           "projectCode": projectCode,
-         }
-      }
-      )
     },
     // 创建信息窗体内容
-    createInfoWindow(str,projectName) {
-       str = `<div style='border-bottom:1px solid #fff;height:36px;line-height:36px;padding-left:15px;'>设备名称</div>
-            <ul style='width:100%;max-height:229px;overflow:auto;'>`+str+`</ul>`
+    createInfoWindow(str, projectName) {
+      str =
+        `<div style='border-bottom:1px solid #fff;height:36px;line-height:36px;padding-left:15px;'>设备名称</div>
+            <ul style='width:100%;max-height:229px;overflow:auto;'>` +
+        str +
+        `</ul>`;
 
-            str = `<div style='width:200px;background-color:0099FF;position:relative;'>
+      str =
+        `<div style='width:200px;background-color:0099FF;position:relative;'>
             <div title='${projectName}' style='width:200px;min-height:36px;line-height:36px;text-align:center;
             position:absolute;left:0;top:0;background-color:#0099FF;color:#fff;
             overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-            padding-left:10px;box-sizing:border-box;'>${projectName}</div>`+
-            `<div style='position:absolute;width:180px;left:200px;top:0;max-height:264px;background:rgba(0,0,0,0.8);color:#fff;'>`
-            +str+`</div></div>`
+            padding-left:10px;box-sizing:border-box;'>${projectName}</div>` +
+        `<div style='position:absolute;width:180px;left:200px;top:0;max-height:264px;background:rgba(0,0,0,0.8);color:#fff;'>` +
+        str +
+        `</div></div>`;
       return str;
     },
   },
@@ -319,12 +354,12 @@ export default {
   padding-top: 4px;
   box-sizing: border-box;
 }
-@media screen and (min-width:992px) {
+@media screen and (min-width: 992px) {
   .mapBigger {
     width: 219%;
   }
 }
-@media screen and (min-width:1200px) {
+@media screen and (min-width: 1200px) {
   .mapBigger {
     width: 301%;
   }
@@ -397,12 +432,12 @@ export default {
   z-index: 99999;
   display: none;
 }
-@media screen and (min-width:992px) {
+@media screen and (min-width: 992px) {
   .shadowWrap {
     width: 219%;
   }
 }
-@media screen and (min-width:1200px) {
+@media screen and (min-width: 1200px) {
   .shadowWrap {
     width: 301%;
   }
@@ -416,20 +451,21 @@ export default {
 }
 :deep(.el-select-dropdown) {
   width: 100% !important;
-  background: rgba(0,0,0,.8) !important;
+  background: rgba(0, 0, 0, 0.8) !important;
 }
-:deep(.el-select__popper.el-popper[role=tooltip]) {
+:deep(.el-select__popper.el-popper[role="tooltip"]) {
   width: 100%;
 }
 :deep(.el-scrollbar) {
-  background: rgba(0,0,0,.8);
+  background: rgba(0, 0, 0, 0.8);
 }
 :deep(.el-select-dropdown__empty) {
-  background-color: #1C1F30;
+  background-color: #1c1f30;
   color: #fff;
 }
-:deep(.el-select__popper.el-popper[role=tooltip][data-popper-placement^=bottom] .el-popper__arrow::before) {
-  background-color: #1C1F30;
+:deep(.el-select__popper.el-popper[role="tooltip"][data-popper-placement^="bottom"]
+    .el-popper__arrow::before) {
+  background-color: #1c1f30;
   border: 0;
 }
 </style>

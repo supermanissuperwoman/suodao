@@ -11,19 +11,19 @@
 //         before(app) {
 //             app.get('/test/projcet', (req, res) => {
 //                 res.json({
-//                     errno: 0,   
+//                     errno: 0,
 //                     data: project
 //                 })
 //             }),
 //             app.get('/test/equip', (req, res) => {
 //                 res.json({
-//                     errno: 0,   
+//                     errno: 0,
 //                     data: euip
 //                 })
 //             }),
 //             app.get('/test/one', (req, res) => {
 //                 res.json({
-//                     errno: 0,   
+//                     errno: 0,
 //                     data: one
 //                 })
 //             })
@@ -45,19 +45,19 @@
 // }
 
 // 导入compression-webpack-plugin
-const CompressionWebpackPlugin = require('compression-webpack-plugin')
+const CompressionWebpackPlugin = require("compression-webpack-plugin");
 // 定义压缩文件类型
-const productionGzipExtensions = ['js', 'css']
+const productionGzipExtensions = ["js", "css"];
 module.exports = {
-	configureWebpack: {
-        plugins: [
-            new CompressionWebpackPlugin({
-                filename: '[path].gz[query]',
-                algorithm: 'gzip',
-                test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'),
-                threshold: 10240,
-                minRatio: 0.8
-            })
-        ]
-    },
-}
+  configureWebpack: {
+    plugins: [
+      new CompressionWebpackPlugin({
+        filename: "[path].gz[query]",
+        algorithm: "gzip",
+        test: new RegExp("\\.(" + productionGzipExtensions.join("|") + ")$"),
+        threshold: 10240,
+        minRatio: 0.8,
+      }),
+    ],
+  },
+};

@@ -65,15 +65,7 @@ export default {
       this.getTableData(getItem("equipData").equipmentCode);
     }
   },
-  mounted() {
-    // 监听search组件事件，获取设备编码
-    eventBus.on("queryEquipInfo", (data) => {
-      // 更新损伤列表
-      this.getTableData(data.currentEquipCode);
-      // 保存当前设备的设备编码
-      this.currentEquipCode = data.currentEquipCode;
-    });
-  },
+
   methods: {
     // 获取列表数据
     async getTableData(equipmentCode) {
@@ -97,6 +89,13 @@ export default {
     // 选择当前页，更新表格数据
     getCurrentPageData(page) {
       this.currentPage = page;
+    },
+    // 提供给父组件调用，重新渲染
+    handleAgainRender(data) {
+      // 更新损伤列表
+      this.getTableData(data.currentEquipCode);
+      // 保存当前设备的设备编码
+      this.currentEquipCode = data.currentEquipCode;
     },
   },
 };

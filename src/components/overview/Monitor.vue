@@ -48,11 +48,11 @@
       <div class="descrip">
         <span>{{ singleEquip.projectName }}</span>
         <span>设备：{{ singleEquip.equipmentName }}</span>
-        <span>运行状态：{{ workState }}</span>
+        <span>运行状态：{{ cableWorkState }}</span>
       </div>
       <div class="content">
         <div class="contentLeft">
-          <img src="../../assets/image/suodaogif.png" alt="" />
+          <img :src="cableSrc" alt="" />
           <span>索道运行图</span>
         </div>
         <div class="contentRight">
@@ -213,8 +213,12 @@ export default {
       singleEquip: {},
       // 图片src地址
       imgSrc: require("../../assets/image/stop.gif"),
+      // 索道图片地址
+      cableSrc: require("../../assets/image/clockstop.gif"),
       // 运行状态标志
       workState: "",
+      // 索道设备运行状态
+      cableWorkState: "",
       probeCommercialConnection: null,
       // 仪表盘容器
       boardEchartInit: null,
@@ -408,7 +412,7 @@ export default {
           this.workEquipGroup.push(this.equipGroup[i]);
         }
       }
-      this.workEquipGroup = this.workEquipGroup.slice(0, 2);
+      // this.workEquipGroup = this.workEquipGroup.slice(0, 2);
       if (this.workEquipGroup.length == 0) {
         this.singleEquip = this.equipGroup[
           this.randomNum(0, this.equipGroup.length - 1)
@@ -474,16 +478,11 @@ export default {
                 copyThis.randomNum(0, copyThis.workEquipGroup.length - 1)
               ];
             copyThis.withEquiptypeToShow(copyThis.singleEquip);
-            console.log(
-              copyThis.boardEchartInit,
-              copyThis.singleEquip.equipmentCode,
-              copyThis.isShow
-            );
             // 注册新设备
             copyThis.probeCommercialConnection.server.registerEquipment(
               copyThis.singleEquip.equipmentCode
             );
-          }, 3000);
+          }, 60000);
         }
       })
       .fail(function() {
@@ -554,22 +553,33 @@ export default {
       if (isMoving == 0) {
         this.workState = "停止";
         this.imgSrc = require("../../assets/image/stop.gif");
+        if (!this.isShow) {
+          this.cableWorkState = "停止";
+          this.cableSrc = require("../../assets/image/clockstop.gif");
+        }
       }
       if (isMoving != 0 && direction == 0) {
         this.workState = "下降";
         this.imgSrc = require("../../assets/image/drop.gif");
+        if (!this.isShow) {
+          this.cableWorkState = "逆时针";
+          this.cableSrc = require("../../assets/image/anticlockwise.gif");
+        }
       }
       if (isMoving != 0 && direction == 1) {
         this.workState = "上升";
         this.imgSrc = require("../../assets/image/rise.gif");
+        if (!this.isShow) {
+          this.cableWorkState = "顺时针";
+          this.cableSrc = require("../../assets/image/clockwise.gif");
+        }
       }
     },
     // 更新概览环形图
     updateCircularGraph(SerialAndID, data) {
       this.updateColor(data / 10);
-      if (this.singleEquip.equipmentCode == "6049b1343c5539dc439fd96b") {
+      if (this.singleEquip.equipmentModel != "IOT01B") {
         this.damageEchartValue = data / 10;
-        console.log(data, this.damageEchartValue);
       } else {
         this.boardDataOption &&
           this.boardEchartInit.setOption(this.boardDataOption);
@@ -657,25 +667,34 @@ export default {
     },
     // 跳转到当前设备的详情页
     toDetail(singleEquip) {
-      setItem("equipData", singleEquip);
-      this.$router.push({
-        name: "detail",
-        params: {
-          equipCode: singleEquip.equipmentCode,
-          projectName: singleEquip.projectName,
-          projectCode: singleEquip.projectCode,
-          equipmentName: singleEquip.equipmentName,
-        },
-      });
+      let currentTime = new Date().getTime();
+      let validTime = new Date(singleEquip.validTime).getTime();
+      if (currentTime < validTime) {
+        setItem("equipData", singleEquip);
+        this.$router.push({
+          name: "detail",
+          params: {
+            equipCode: singleEquip.equipmentCode,
+            projectName: singleEquip.projectName,
+            projectCode: singleEquip.projectCode,
+            equipmentName: singleEquip.equipmentName,
+          },
+        });
+      } else {
+        this.$message({
+          type: "warning",
+          message: "设备已到期，不允许跳转，请续费",
+        });
+      }
     },
     // 根据设备类型判断显示的内容
     withEquiptypeToShow(singleEquip) {
-      if (singleEquip.equipmentCode == "6049b1343c5539dc439fd96b") {
+      if (singleEquip.equipmentModel != "IOT01B") {
         this.isShow = false;
         if (this.boardEchartInit != null) {
           this.boardEchartInit.dispose();
           this.boardEchartInit = null;
-          console.log(this.boardEchartInit);
+          this.cableSrc = require("../../assets/image/anticlockwise.gif");
         }
       } else {
         this.isShow = true;
@@ -685,7 +704,10 @@ export default {
         this.imgSrc = require("../../assets/image/stop.gif");
         this.$nextTick(() => {
           let dom = document.getElementById("board");
-          this.boardEchartInit = echarts.init(dom);
+          if (dom) {
+            this.boardEchartInit = echarts.init(dom);
+          }
+
           // 初始化环形图
           this.boardDataOption.series[0].endAngle = -180;
           this.boardDataOption &&
@@ -829,6 +851,7 @@ export default {
     display: flex;
     padding-top: 10px;
     justify-content: space-around;
+    font-size: 14px;
   }
   .content {
     width: 100%;
@@ -840,10 +863,36 @@ export default {
     .contentLeft {
       width: 50%;
       position: relative;
+      img {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        max-width: 280px;
+      }
+      @media screen and (min-width: 1200px) {
+        img {
+          width: 140px;
+        }
+      }
+      @media screen and (min-width: 1500px) {
+        img {
+          width: 200px;
+        }
+      }
       span {
         position: absolute;
         margin-top: 10px;
-        bottom: 0;
+        bottom: -10px;
+      }
+      @media screen and (min-width: 1200px) {
+        span {
+          bottom: 4px;
+        }
+      }
+      @media screen and (min-width: 1500px) {
+        span {
+          bottom: -10px;
+        }
       }
     }
     .contentRight {
@@ -853,13 +902,26 @@ export default {
       display: flex;
       justify-content: center;
       .barWrap {
-        width: 40%;
+        width: 35%;
         position: relative;
         transform: rotate(90deg);
       }
       span {
         position: absolute;
-        bottom: 0;
+        bottom: -10px;
+      }
+      @media screen and (min-width: 1200px) {
+        .barWrap {
+          width: 60%;
+        }
+        span {
+          bottom: 4px;
+        }
+      }
+      @media screen and (min-width: 1500px) {
+        span {
+          bottom: -12px;
+        }
       }
     }
   }

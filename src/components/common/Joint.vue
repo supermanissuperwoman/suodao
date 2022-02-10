@@ -32,15 +32,11 @@ export default {
   mounted() {
     let dom = document.getElementsByClassName("jointPercentageWrap")[0];
     this.echartContainer = echarts.init(dom);
-
-    eventBus.on("queryEquipInfo", (data) => {
-      console.log(data);
-      this.currentEquipDamageOptions(data.currentEquipCode);
-    });
     eventBus.on("getCode", (data) => {
       this.currentEquipDamageOptions(data.currentEquipCode);
     });
   },
+
   methods: {
     myResize() {
       this.echartContainer.resize();
@@ -212,7 +208,6 @@ export default {
         this.echartOptions.series[0].data = this.yData;
         this.$nextTick(() => {
           let dom = document.getElementsByClassName("jointPercentageWrap")[0];
-          console.log(dom);
           if (dom) {
             // 重新初始化echarts实例
             this.echartContainer = echarts.init(dom);

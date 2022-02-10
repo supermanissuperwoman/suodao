@@ -2,7 +2,11 @@
   <!-- 详情上-开始 -->
   <el-row class="searchRow">
     <el-col :xs="24" :lg="24">
-      <search @showComponent="showComponent"></search>
+      <search
+        ref="searchRef"
+        @showComponent="showComponent"
+        @queryEquipInfo="handleSearchEmitEquipInfor"
+      ></search>
     </el-col>
   </el-row>
 
@@ -100,6 +104,14 @@ export default {
     eventBus.on("clickSearch", (data) => {
       this.isClickSearch = data.isClickSearch;
     });
+    if (
+      getItem("equipData") &&
+      getItem("equipData").equipmentModel != "IOT01B"
+    ) {
+      this.showComponent({ flag: "suodao" });
+    } else {
+      this.showComponent({ flag: "nosuodao" });
+    }
   },
   mounted() {
     window.addEventListener("resize", () => {
@@ -146,7 +158,6 @@ export default {
   methods: {
     // 监听search组件设备变化时选择的设备类型，展示不同的组件
     showComponent(data) {
-      console.log(data);
       this.componentFlag = data.flag;
       this.$nextTick(() => {
         if (data.flag == "suodao") {
@@ -160,6 +171,41 @@ export default {
           this.$refs.damageListRef.pageCount = 10;
         }
       });
+    },
+    // 监听子组件search发出的自定义事件，获取选中的设备，然后操作子组件渲染数据
+    handleSearchEmitEquipInfor(data) {
+      if (this.$refs.overViewRef) {
+        this.$refs.overViewRef.handleAgainRender(data);
+      }
+      if (this.$refs.monitorRef) {
+        this.$refs.monitorRef.currentEquipDamageOptions(data.currentEquipCode);
+      }
+      if (this.$refs.damageValueRef) {
+        this.$refs.damageValueRef.currentEquipBarOptions(data.currentEquipCode);
+      }
+      if (this.$refs.goDistanceRef) {
+        this.$refs.goDistanceRef.currentEquipOptions(data.currentEquipCode);
+      }
+      if (this.$refs.damageListRef) {
+        this.$refs.damageListRef.handleAgainRender(data);
+      }
+      if (this.$refs.cablewayRef) {
+        this.$refs.cablewayRef.$refs.cabelOverviewRef.handleAgainRender(data);
+        this.$refs.cablewayRef.$refs.monitorRef.currentEquipDamageOptions(
+          data.currentEquipCode
+        );
+        this.$refs.cablewayRef.$refs.damageListRef.handleAgainRender(data);
+        this.$refs.cablewayRef.$refs.damageValueRef.currentEquipBarOptions(
+          data.currentEquipCode
+        );
+        this.$refs.cablewayRef.$refs.goDistanceRef.currentEquipOptions(
+          data.currentEquipCode
+        );
+        this.$refs.cablewayRef.$refs.jointRef.currentEquipDamageOptions(
+          data.currentEquipCode
+        );
+        this.$refs.cablewayRef.$refs.jointListRef.handleAgainRender(data);
+      }
     },
   },
 };

@@ -85,6 +85,7 @@
                   }}
                 </span>
                 <span v-if="scope.row.workingStatus === 6">报警</span>
+                <span v-if="scope.row.workingStatus === 7">未安装</span>
               </template>
             </el-table-column>
             <el-table-column prop="installLocation" label="安装地址">
@@ -116,12 +117,12 @@
             </el-table-column>
             <el-table-column label="传感器">
               <template v-slot="scope">
-                {{ scope.row.seriousSerialAee[0] }}
+                {{ scope.row.sensorSerialArr[0] }}
               </template>
             </el-table-column>
             <el-table-column label="编码器">
               <template v-slot="scope">
-                {{ scope.row.encodeSerial[0] }}
+                {{ scope.row.encodeSerialArr[0] }}
               </template>
             </el-table-column>
             <el-table-column
@@ -348,17 +349,6 @@ export default {
       }
     },
 
-    // 获取故障设备，并显示在设备列表中
-    async getFaultEquip() {
-      let faultEquipGroup = [];
-      for (let i = 0; i < this.currentProjectEquip.length; i++) {
-        if (this.currentProjectEquip[i].workingStatus === 5) {
-          faultEquipGroup.push(this.currentProjectEquip[i]);
-        }
-      }
-      this.currentProjectEquip = faultEquipGroup;
-    },
-
     // 获取相应工作状态设备的方法
     async getWorkState(state) {
       let cache = [];
@@ -387,6 +377,9 @@ export default {
             cache.push(data[i]);
           } else if (data[i].workingStatus == 6 && state == "alarm") {
             cache.push(data[i]);
+          } else if (data[i].workingStatus == 7 && state == "noinstall") {
+            data[i].installDate = "";
+            cache.push(data[i]);
           } else if (state == "all") {
             cache.push(data[i]);
           }
@@ -396,16 +389,25 @@ export default {
     },
     // 跳转到当前设备的实时详情页面
     toDetail(singleEquip) {
-      setItem("equipData", singleEquip);
-      this.$router.push({
-        name: "detail",
-        params: {
-          equipCode: singleEquip.equipmentCode,
-          projectName: singleEquip.projectName,
-          projectCode: singleEquip.projectCode,
-          equipmentName: singleEquip.equipmentName,
-        },
-      });
+      let currentTime = new Date().getTime();
+      let validTime = new Date(singleEquip.validTime).getTime();
+      if (currentTime < validTime) {
+        setItem("equipData", singleEquip);
+        this.$router.push({
+          name: "detail",
+          params: {
+            equipCode: singleEquip.equipmentCode,
+            projectName: singleEquip.projectName,
+            projectCode: singleEquip.projectCode,
+            equipmentName: singleEquip.equipmentName,
+          },
+        });
+      } else {
+        this.$message({
+          type: "warning",
+          message: "设备已到期，不允许跳转，请续费",
+        });
+      }
     },
     // 修改表格信息
     editTbaleInfo(rowInfo, event) {

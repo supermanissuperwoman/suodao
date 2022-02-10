@@ -30,19 +30,12 @@ export default {
       resData: [],
     };
   },
-  created() {
-    eventBus.on("getCode", (data) => {
-      this.projectCode = data.currentProjectCode;
-      this.reportDate = data.reportDate;
-      if (data.isWeekDisable) {
-        this.getImageData(this.projectCode, this.reportDate);
-      }
-    });
-  },
+
   mounted() {
     let dom = document.getElementsByClassName("chartContainer")[0];
     this.chartContainer = echarts.init(dom);
   },
+
   methods: {
     myResize() {
       this.chartContainer.resize();

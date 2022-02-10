@@ -41,12 +41,6 @@ export default {
   mounted() {
     let container = document.getElementsByClassName("distanceContainer")[0];
     this.chartContainer = echarts.init(container);
-    // this.chartOptions && this.chartContainer.setOption(this.chartOptions);
-    // 监听search组件注册事件，得到设备编码
-    eventBus.on("queryEquipInfo", (data) => {
-      // 更新当前设备的图形配置数据
-      this.currentEquipOptions(data.currentEquipCode);
-    });
   },
   methods: {
     myResize() {
@@ -66,8 +60,8 @@ export default {
           // },
         },
         grid: {
-          right: "50px",
-          bottom: "26px",
+          right: "55px",
+          bottom: "32px",
           left: "50px",
           top: "12%",
         },
@@ -271,7 +265,7 @@ export default {
         }
 
         // 通过回调函数设置tooltip提示框
-        this.chartOptions.tooltip.formatter = function (params) {
+        this.chartOptions.tooltip.formatter = function(params) {
           let str = "";
           if (params.componentIndex == 0) {
             str =
